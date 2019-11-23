@@ -4,55 +4,31 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
-const nodemailer = require('nodemailer');
-const config = require('../../config/keys_dev');
 
 // Load input validation
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
+const validateResetPasswordInput = require('../../validation/resetPassword');
+const validateSetNewPasswordInput = require('../../validation/setNewPassword');
 
 // Load User model
 const User = require('../../db/models/User');
 const ConfirmationHash = require('../../db/models/ConfirmationHash');
+const ResetPasswordHash = require('../../db/models/ResetPasswordHash');
 
-function sendConfirmationEmail({ toUser, hash }, callback) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: config.google_user,
-      pass: config.google_password
-    }
-  })
-
-  const message = {
-    from: config.google_user,
-    to: toUser.email,
-    subject: 'Vuesocialnet - activate account',
-    html: `
-    <h3>Привет! ${toUser.name}</h3>
-    <p>Спасибо за регистрацию на портале Fqblog.ru!</p>
-    <p>для активации аккаунта, пройдите по ссылке: <a target="_" href="${config.domain}/users/${hash}/activate">${config.domain}/activate </a></p>
-    `
-  }
-
-  transporter.sendMail(message, function(error, info) {
-    if(error) {
-      callback(error, null)
-    } else {
-      callback(null, info)
-    }
-  }) 
-}
+// Load send mail helpers
+const sendResetPasswordEmail = require('../helpers/sendResetPasswordEmail');
+const sendConfirmationEmail = require('../helpers/sendConfirmationEmail');
 
 // Shortened for /api/users/test
 router.get('/test', (req, res) => res.json({msg:'users work'}));
 
-// GET api/users/register
+// POST api/users/register
 // Register new user
 // Public
 router.post('/register', (req, res) => {
 
-  // Pull out errors and isValid from vlidate/register
+  // Pull out errors and isValid from validate/register
   // and passing in everythind that sent to this route
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -96,7 +72,12 @@ router.post('/register', (req, res) => {
                   sendConfirmationEmail({ toUser: user, hash: hash.id }, (err, info) => {
                     if(err) throw err;
 
-                    return res.json(user);
+                    return res.json({
+                      active: user.active,
+                      _id: user._id,
+                      name: user.name,
+                      email: user.email
+                    });
                   })
                 })
               })
@@ -107,8 +88,8 @@ router.post('/register', (req, res) => {
     });
 });
 
-// GET api/users//:hash/activete
-// Actevate user
+// PATCH api/users/:hash/activate
+// Activate user
 // Public
 router.patch('/:hash/activate', (req, res) =>{
   const hash = req.params.hash;
@@ -135,7 +116,117 @@ router.patch('/:hash/activate', (req, res) =>{
     })
 })
 
-// GET api/users/login
+// POST api/users/resetPassword
+// Reset user's password
+// Public
+router.post('/reset-password', (req, res) => {
+
+  // Pull out errors and isValid from validate/register
+  // and passing in everythind that sent to this route
+  const { errors, isValid } = validateResetPasswordInput(req.body);
+
+  // Check validation
+  if(!isValid) {
+    // Sending the entire errors object with all the errors
+    return res.status(400).json(errors);
+  }
+
+  // Check if email exists
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      if(!user) {
+        errors.email = 'Пользователя с таким Email не существует';
+        // Passing errors object from validateRegisterInput 
+        // with errors.email property
+        return res.status(400).json(errors);
+      } else {
+
+        // Encrypt the password
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(user.password, salt, (err, hash) => {
+            if(err) throw err;
+            // Save the encrypted password in user object
+            user.password = hash;
+            user
+              .save()
+              .then(user => {
+                const hash = new ResetPasswordHash({ user: user});
+
+                hash.save((err, createdHash) => {
+                  if(err) throw err;
+
+                  sendResetPasswordEmail({ toUser: user, hash: hash.id }, (err, info) => {
+                    if(err) throw err;
+
+                    return res.json(user.email);
+                  })
+                })
+              })
+              .catch(err => console.log(err));
+          });
+        });
+      }
+    });
+});
+
+// PATCH api/users/:hash/reset-password
+// Reset's password user
+// Public
+router.patch('/:hash/reset-password', (req, res) =>{
+  const hash = req.params.hash;
+  const password = req.body.password;
+
+  const { errors, isValid } = validateSetNewPasswordInput(req.body);
+
+  // Check validation
+  if(!isValid) {
+    // Sending the entire errors object with all the errors
+    return res.status(400).json(errors);
+  }
+
+  ResetPasswordHash
+    .findById(hash)
+    .populate('user')
+    .exec((errors, foundHash) => {
+      if(errors) {
+        errors.notValidHash = 'Некорректная контрольная строка';
+        return res.status(404).json(errors);
+      }
+
+      User.findById(foundHash.user.id)
+        .then(user => {
+          if(!user) {
+            errors.email = 'Пользователя с таким Email не существует';
+            
+            return res.status(400).json(errors);
+          } else {
+
+            // Encrypt the password
+            bcrypt.genSalt(10, (err, salt) => {
+              bcrypt.hash(password, salt, (err, hash) => {
+                if(err) throw err;
+                // Save the encrypted password in user object
+                user.password = hash;
+                user
+                  .save()
+                  .then(user => {                    
+                    return res.json({
+                      active: user.active,
+                      _id: user._id,
+                      name: user.name,
+                      email: user.email
+                    });
+                  })
+                  .catch(err => console.log(err));
+              });
+            });
+            foundHash.remove(() => {});
+          }
+        })
+    })
+})
+
+// POST api/users/login
 // Login user / Returning JWT Token
 // Public
 router.post('/login', (req, res) => {
@@ -179,7 +270,7 @@ router.post('/login', (req, res) => {
             jwt.sign(
               payload, 
               keys.secretOrKey, 
-              { expiresIn: 3600 }, 
+              { expiresIn: 604800 }, 
               (err, token) => {
                 res.json({
                   success: true,

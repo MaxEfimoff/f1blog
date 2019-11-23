@@ -38,7 +38,7 @@ module.exports = function validateRegisterInput(data) {
 
   // Password length should be between 6 and 30 characters
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
-    errors.password = 'Имя не должно быть короче 6 и длиннее 30 знаков';
+    errors.password = 'Пароль не должен быть короче 6 и длиннее 30 знаков';
   }
 
   // Password and password2 fields should match
