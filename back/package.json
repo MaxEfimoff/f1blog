@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "f1blog backend",
   "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "test": "jest --verbose"
   },
   "author": "Max Efimoff",
   "license": "ISC",
@@ -27,6 +31,8 @@
     "validator": "^12.1.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.1"
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.1",
+    "supertest": "^4.0.2"
   }
 }
