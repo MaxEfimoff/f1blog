@@ -1,5 +1,6 @@
 const request = require('supertest');
 const loginUser = require('../../routes/helpers/loginUser');
+const emailGenerator = require('../../routes/helpers/emailGenerator');
 
 const route = '/api/users';
 const { appServer } = require('../../server');
@@ -130,7 +131,7 @@ describe('api/users', () => {
 
   // Register
   describe('POST /register', () => {
-    it('should return 400 if user logges in without name', async () => {
+    it('should return 400 if user registers without name', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({email: "emv5@narod.ru", password: "555555", password2: "555555"})
@@ -140,7 +141,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with short name', async () => {
+    it('should return 400 if user registers with short name', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "a",email: "emv5@narod.ru", password: "555555", password2: "555555"})
@@ -150,7 +151,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with long name', async () => {
+    it('should return 400 if user registers with long name', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({
@@ -174,7 +175,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in without email', async () => {
+    it('should return 400 if user registers without email', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "Maximus", password: "555555", password2: "555555"})
@@ -184,7 +185,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with incorrect email', async () => {
+    it('should return 400 if user registers with incorrect email', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "Maximus", email: "enm4.ru", password: "555555", password2: "555555"})
@@ -194,7 +195,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in without password', async () => {
+    it('should return 400 if user registers without password', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "Maximus", email: "emv5@narod.ru", password2: "555555"})
@@ -207,7 +208,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with short password', async () => {
+    it('should return 400 if user registers with short password', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "Maximus", email: "emv5@narod.ru", password: "55555", password2: "555555"})
@@ -220,7 +221,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with long password', async () => {
+    it('should return 400 if user registers with long password', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({
@@ -238,7 +239,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in without password2', async () => {
+    it('should return 400 if user registers without password2', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "Maximus", email: "emv5@narod.ru", password: "555555"})
@@ -248,7 +249,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with short password2', async () => {
+    it('should return 400 if user registers with short password2', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({name: "Maximus", email: "emv5@narod.ru", password: "555555", password2: "55555"})
@@ -258,7 +259,7 @@ describe('api/users', () => {
   })
 
   describe('POST /register', () => {
-    it('should return 400 if user logges in with long password2', async () => {
+    it('should return 400 if user registers with long password2', async () => {
       const res = await request(appServer)
         .post(`${route}/register`)
         .send({
@@ -269,6 +270,22 @@ describe('api/users', () => {
         })
       expect(res.status).toBe(400);
       expect(res.body).toMatchObject({"password": "Пароль не должен быть короче 6 и длиннее 30 знаков"});
+    })
+  })
+
+  describe('POST /register', () => {
+    it('should return 200 if user registers with correct data', async () => {
+      const generatedEmail = emailGenerator();
+
+      const res = await request(appServer)
+        .post(`${route}/register`)
+        .send({
+          name: "Maximus",
+          email: generatedEmail,
+          password: "111111",
+          password2: "111111"
+        })
+      expect(res.status).toBe(200);
     })
   })
 })
