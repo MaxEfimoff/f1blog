@@ -9,7 +9,9 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "client": "cd ../front && npm run serve",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Max Efimoff",
   "license": "ISC",

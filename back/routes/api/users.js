@@ -135,7 +135,7 @@ router.post('/reset-password', (req, res) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if(!user) {
-        errors.email = 'Пользователя с таким Email не существует';
+        errors.email = 'Пользователь с таким Email не существует';
         // Passing errors object from validateRegisterInput 
         // with errors.email property
         return res.status(400).json(errors);
@@ -173,16 +173,16 @@ router.post('/reset-password', (req, res) => {
 // Reset's password user
 // Public
 router.patch('/:hash/reset-password', (req, res) =>{
-  const hash = req.params.hash;
+  const hash = req.body.hash;
   const password = req.body.password;
 
-  const { errors, isValid } = validateSetNewPasswordInput(req.body);
+  // const { errors, isValid } = validateSetNewPasswordInput(password);
 
-  // Check validation
-  if(!isValid) {
-    // Sending the entire errors object with all the errors
-    return res.status(400).json(errors);
-  }
+  // // Check validation
+  // if(!isValid) {
+  //   // Sending the entire errors object with all the errors
+  //   return res.status(400).json(errors);
+  // }
 
   ResetPasswordHash
     .findById(hash)
@@ -252,7 +252,7 @@ router.post('/login', (req, res) => {
       }
 
       if(user.active === false) {
-        errors.hashNotActive = 'На ваш email ссылка с активацией учетной записи';
+        errors.hashNotActive = 'На ваш email отправлена ссылка с активацией учетной записи';
         return res.status(404).json(errors)
       }
       // Compare plain text password (password) from the form with the hash (user.password) in db

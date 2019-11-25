@@ -11,7 +11,7 @@ const users = require('./routes/api/users');
 
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server, {pingTimeout: 60000});
+// const io = require('socket.io')(server, {pingTimeout: 60000});
 
 // Websockets
 // require('./socket')(io)
