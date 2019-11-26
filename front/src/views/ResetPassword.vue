@@ -3,6 +3,7 @@
     <form @submit.prevent="submitForm">
       <h1>Восстановление пароля</h1>
       <input
+        data-cy="resetPasswordEmail"
         v-model.trim="formData.email"
         @blur="$v.formData.email.$touch()"
         type="email"
@@ -17,10 +18,9 @@
         {{this.errors.email}}
       </div>
       <button
+        data-cy="submitFormData"
         type="submit"
-        :disabled="$v.formData.$invalid">
-        Восстановить пароль
-      </button>
+        :disabled="$v.formData.$invalid">Восстановить пароль</button>
     </form>
   </div>
 </template>

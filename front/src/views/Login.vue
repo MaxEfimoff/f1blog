@@ -3,6 +3,7 @@
     <form @submit.prevent="submitForm">
       <h1>Вход</h1>
       <input
+        data-cy="formData.email"
         v-model.trim="formData.email"
         @blur="$v.formData.email.$touch()"
         type="email"
@@ -17,6 +18,7 @@
         {{this.errors.userNotFound}}
       </div>
       <input
+        data-cy="formData.password"
         v-model.trim="formData.password"
         @blur="$v.formData.password.$touch()"
         type="password"
@@ -38,10 +40,11 @@
       <div class="error-message">
         {{this.errors.hashNotActive}}
       </div>
-      <span @click.prevent="showResetPasswordModal">
-        Забыли пароль?
-      </span>
+      <span 
+        data-cy="forgotPassword"
+        @click.prevent="showResetPasswordModal">Забыли пароль?</span>
       <button
+        data-cy="enter"
         type="submit"
         :disabled="$v.formData.$invalid">
         Войти

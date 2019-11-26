@@ -4,22 +4,23 @@
       <h1>Регистрация</h1>
       <!-- Name -->
       <input
-        v-model="formRegisterData.name"
-        @blur="$v.formRegisterData.name.$touch()"
+        data-cy="formData.name"
+        v-model="formData.name"
+        @blur="$v.formData.name.$touch()"
         type="text"
         placeholder="Ваше имя"
         ref="name"
       />
       <div
-        v-if="$v.formRegisterData.name.$error"
+        v-if="$v.formData.name.$error"
         class="form-error">
         <span
-          v-if="!$v.formRegisterData.name.required"
+          v-if="!$v.formData.name.required"
           class="is-danger">
           Поле Имя обязательно к заполнению
         </span>
         <span
-          v-if="!$v.formRegisterData.name.minLength"
+          v-if="!$v.formData.name.minLength"
           class="is-danger">
           Минимальная длина имени - 6 символов
         </span>
@@ -29,33 +30,35 @@
       </div>
       <!-- E-mail -->
       <input
-        v-model.trim="formRegisterData.email"
-        @blur="$v.formRegisterData.email.$touch()"
+        data-cy="formData.email"
+        v-model.trim="formData.email"
+        @blur="$v.formData.email.$touch()"
         type="email"
         placeholder="Ваш Email"
         id="email"
         ref="email"
         />
-      <div v-if="$v.formRegisterData.email.$error" class="form-error">
-        <span v-if="!$v.formRegisterData.email.required" class="is-danger">Поле Email обязательно к заполнению</span>
-        <span v-if="!$v.formRegisterData.email.email" class="is-danger">Email не корректный</span>
+      <div v-if="$v.formData.email.$error" class="form-error">
+        <span v-if="!$v.formData.email.required" class="is-danger">Поле Email обязательно к заполнению</span>
+        <span v-if="!$v.formData.email.email" class="is-danger">Email не корректный</span>
       </div>
       <div class="error-message">
         {{this.errors.email}}
       </div>
       <!-- Password -->
       <input
-        v-model.trim="formRegisterData.password"
-        @blur="$v.formRegisterData.password.$touch()"
+        data-cy="formData.password"
+        v-model.trim="formData.password"
+        @blur="$v.formData.password.$touch()"
         type="password"
         ref="password"
         placeholder="Ваш пароль"
       />
-      <div v-if="$v.formRegisterData.password.$error" class="form-error">
-        <span v-if="!$v.formRegisterData.password.required" class="is-danger">Поле Пароль обязательно к заполнению
+      <div v-if="$v.formData.password.$error" class="form-error">
+        <span v-if="!$v.formData.password.required" class="is-danger">Поле Пароль обязательно к заполнению
         </span>
         <span
-          v-if="!$v.formRegisterData.password.minLength"
+          v-if="!$v.formData.password.minLength"
           class="is-danger">Минимальная длина пароля - 6 символов
         </span>
       </div>
@@ -64,29 +67,31 @@
       </div>
       <!-- Password2 -->
       <input
-        v-model.trim="formRegisterData.password2"
-        @blur="$v.formRegisterData.password2.$touch()"
+        data-cy="formData.password2"
+        v-model.trim="formData.password2"
+        @blur="$v.formData.password2.$touch()"
         type="password"
         placeholder="Подтверждение пароля"
         ref="password2"
         autocomplete="off"
       />
       <div
-        v-if="$v.formRegisterData.password2.$error"
+        v-if="$v.formData.password2.$error"
         class="form-error">
         <span
-          v-if="!$v.formRegisterData.password2.required"
+          v-if="!$v.formData.password2.required"
           class="is-danger">Поле Подтверждение пароля обязательно к заполнению</span>
         <span
-          v-if="!$v.formRegisterData.password2.sameAs"
+          v-if="!$v.formData.password2.sameAs"
           class="is-danger">Пароли не совпадают</span>
       </div>
       <div class="error-message">
         {{this.errors.password2}}
       </div>
       <button
+        data-cy="submitFormData"
         type="submit"
-        :disabled="$v.formRegisterData.$invalid">
+        :disabled="$v.formData.$invalid">
         Зарегистрироваться
       </button>
     </form>
@@ -102,7 +107,7 @@ export default {
   name: 'Register',
   data() {
     return {
-      formRegisterData: {
+      formData: {
         email: '',
         password: '',
         password2: '',
@@ -111,7 +116,7 @@ export default {
     }
   },
   validations: {
-    formRegisterData: {
+    formData: {
       name: {
         required,
         minLength: minLength(6)
@@ -137,10 +142,10 @@ export default {
   },
   methods: {
     submitRegisterForm() {
-      this.$store.dispatch('auth/register', this.formRegisterData)
+      this.$store.dispatch('auth/register', this.formData)
         .catch((error) => {console.log(error)});
       
-      this.$emit('closeLoginModal');
+      this.$emit('closeRegisterModal');
     },
   },
 };

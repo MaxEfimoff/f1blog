@@ -8,8 +8,8 @@ const resetPasswordUrl = `${serverUrl}/api/users/reset-password`;
 
 
 export {
-  // Auth
   serverUrl,
+  // Auth
   registerUrl,
   resetPasswordUrl,
   loginUrl,

@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="container">
-      <h1>
+      <h1 data-cy="home">
         <router-link
           to="/">
           F1blog
@@ -18,12 +18,12 @@
             </span>
           </router-link> -->
           <a @click="logout">
-            <span class="padding">Logout</span>
+            <span data-cy="logout">Выйти</span>
           </a>
         </div>
         <div v-else>
-          <span @click.prevent="showLoginModal">Login</span>
-          <span @click.prevent="showRegisterModal">Register</span>
+          <span data-cy="login" @click.prevent="showLoginModal">Войти</span>
+          <span data-cy="register" @click.prevent="showRegisterModal">Зарегистрироваться</span>
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@
     "@vue/cli-plugin-router": "^4.0.0",
     "@vue/cli-plugin-vuex": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
+    "cypress": "^3.6.1",
     "vue-template-compiler": "^2.6.10"
   },
   "postcss": {
