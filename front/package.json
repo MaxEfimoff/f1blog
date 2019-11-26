@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -24,7 +25,9 @@
     "@vue/cli-plugin-unit-jest": "^4.0.5",
     "@vue/cli-plugin-vuex": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
     "cypress": "^3.6.1",
+    "flush-promises": "^1.0.2",
     "vue-template-compiler": "^2.6.10"
   },
   "postcss": {

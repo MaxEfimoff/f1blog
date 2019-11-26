@@ -17,8 +17,8 @@
               Users
             </span>
           </router-link> -->
-          <a @click="logout">
-            <span data-cy="logout">Выйти</span>
+          <a @click="logout" id="logout">
+            <span data-cy="logout" >Выйти</span>
           </a>
         </div>
         <div v-else>
