@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const config = require('../../config/keys_dev');
 
-module.exports = function sendResetPasswordEmail({ toUser, hash }, callback) {
+module.exports = sendResetPasswordEmail = ({ toUser, hash }, callback) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -22,7 +22,7 @@ module.exports = function sendResetPasswordEmail({ toUser, hash }, callback) {
     `
   }
 
-  transporter.sendMail(message, function(error, info) {
+  transporter.sendMail(message, (error, info) => {
     if(error) {
       callback(error, null)
     } else {
