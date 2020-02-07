@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 
 // Routes
 const users = require('./routes/api/users');
+const profiles = require('./routes/api/profiles');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -38,6 +39,7 @@ require('./config/passport')(passport);
 
 // Use routes
 app.use('/api/users', users);
+app.use('/api/profiles', profiles);
 
 // Heroku settings
 const PORT = process.env.PORT || 5000;
