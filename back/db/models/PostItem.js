@@ -46,7 +46,9 @@ const PostItemSchema = new Schema({
       },
       text: {
         type: String,
-        required: true
+        required: true,
+        min: 6,
+        max: 500
       },
       createdAt: {
         type: Date,

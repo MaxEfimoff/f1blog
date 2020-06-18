@@ -10,17 +10,24 @@ const GroupSchema = new Schema({
   handle: {
     type: String,
     required: true,
+    min: 2,
     max: 40
   },
   status: {
-    type: String
+    type: String,
+    min: 6,
+    max: 140
   },
   info: {
-    type: String
+    type: String,
+    min: 6,
+    max: 140
   },
   title: {
     type: String,
-    required: true
+    required: true,
+    min: 6,
+    max: 140
   },
   avatar: {
     type: String

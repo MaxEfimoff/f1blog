@@ -27,6 +27,7 @@ const ProfileSchema = new Schema({
   handle: {
     type: String,
     required: true,
+    min: 2,
     max: 40
   },
   avatar: {
@@ -37,37 +38,10 @@ const ProfileSchema = new Schema({
     type: String,
     max: 200
   },
-  city: {
-    type: String,
-    max: 40
-  },
   status: {
     type: String,
+    min: 2,
     max: 50
-  },
-  vk: {
-    type: String,
-    max: 100
-  },
-  odnoklassniki: {
-    type: String,
-    max: 100
-  },
-  youtube: {
-    type: String,
-    max: 100
-  },
-  twitter: {
-    type: String,
-    max: 100
-  },
-  facebook: {
-    type: String,
-    max: 100
-  },
-  instagram: {
-    type: String,
-    max: 100
   },
   date: {
     type: Date,

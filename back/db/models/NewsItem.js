@@ -35,6 +35,8 @@ const NewsItemSchema = new Schema({
       },
       text: {
         type: String,
+        min: 6,
+        max: 500,
         required: true
       },
       createdAt: {
