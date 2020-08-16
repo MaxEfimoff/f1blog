@@ -19,7 +19,7 @@ const unlikeNewsItem = require('../controllers/newsItems/unlikeNewsItem');
 const postNewsItemComment = require('../controllers/newsItems/postNewsItemComment');
 const deleteNewsItemComment = require('../controllers/newsItems/deleteNewsItemComment');
 
-// Shortened for /api/posts/test
+// Shortened for /api/newsitems
 router.get('/test', test);
 router.get('/all', fetchAllNewsItems);
 router.get('/my-news', passport.authenticate('jwt', {session: false}), fetchMyNewsItems);
@@ -45,30 +45,30 @@ router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', {session:
 
 
 
-//@route      GET api/posts/
-//@desc       Get posts
-//@access     Private
-router.get('/all', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Post
-    .find()
-    .sort({date: -1})
-    .then(posts => res.json(posts))
-    .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
-})
+// //@route      GET api/posts/
+// //@desc       Get posts
+// //@access     Private
+// router.get('/all', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   Post
+//     .find()
+//     .sort({date: -1})
+//     .then(posts => res.json(posts))
+//     .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
+// })
 
-//@route      GET api/my-posts/
-//@desc       Get my posts
-//@access     Private
-router.get('/my-posts', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Profile.findOne({ user: req.user.id })
-  .then(profile => {
-    Post
-    .find({name: profile.handle})
-    .sort({date: -1})
-    .then(posts => res.json(posts))
-  })
-    .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
-})
+// //@route      GET api/my-posts/
+// //@desc       Get my posts
+// //@access     Private
+// router.get('/my-posts', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   Profile.findOne({ user: req.user.id })
+//   .then(profile => {
+//     Post
+//     .find({name: profile.handle})
+//     .sort({date: -1})
+//     .then(posts => res.json(posts))
+//   })
+//     .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
+// })
 
 //@route      GET api/friends-posts/
 //@desc       Get friends posts
@@ -85,86 +85,86 @@ router.get('/friends-posts', passport.authenticate("jwt", { session: false }), (
   })
 })
 
-//@route      GET api/posts/:id
-//@desc       Get post by id
-//@access     Private
-router.get('/:id', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Post
-    .findById(req.params.id)
-    .then(post => res.json(post))
-    .catch(err => res.status(404).json({nopostfound: 'No post found with that Id'}));
-})
+// //@route      GET api/posts/:id
+// //@desc       Get post by id
+// //@access     Private
+// router.get('/:id', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   Post
+//     .findById(req.params.id)
+//     .then(post => res.json(post))
+//     .catch(err => res.status(404).json({nopostfound: 'No post found with that Id'}));
+// })
 
-//@route      POST api/posts/
-//@desc       Create post
-//@access     Private
-router.post('/', passport.authenticate("jwt", { session: false }), (req, res) => {
-  const {errors, isValid} = validatePostInput(req.body);
+// //@route      POST api/posts/
+// //@desc       Create post
+// //@access     Private
+// router.post('/', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   const {errors, isValid} = validatePostInput(req.body);
 
-  // Check Validation
-  if(!isValid) {
-    // If any errors, send 400 with errors object
-    return res.status(400).json(errors);
-  }
+//   // Check Validation
+//   if(!isValid) {
+//     // If any errors, send 400 with errors object
+//     return res.status(400).json(errors);
+//   }
 
-  const newPost = new Post({
-    text: req.body.text,
-    name: req.body.name,
-    profile: req.body.profile,
-    avatar: req.body.avatar
-  });
+//   const newPost = new Post({
+//     text: req.body.text,
+//     name: req.body.name,
+//     profile: req.body.profile,
+//     avatar: req.body.avatar
+//   });
 
-  newPost.save()
-    .then(post => res.json(post));
-});
+//   newPost.save()
+//     .then(post => res.json(post));
+// });
 
-//@route      PATCH api/posts/
-//@desc       Update post
-//@access     Private
-router.patch('/:id/update-post', passport.authenticate("jwt", { session: false }), (req, res) => {
-  const {errors, isValid} = validatePostInput(req.body);
+// //@route      PATCH api/posts/
+// //@desc       Update post
+// //@access     Private
+// router.patch('/:id/update-post', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   const {errors, isValid} = validatePostInput(req.body);
 
-  // Check Validation
-  if(!isValid) {
-    // If any errors, send 400 with errors object
-    return res.status(400).json(errors);
-  }
+//   // Check Validation
+//   if(!isValid) {
+//     // If any errors, send 400 with errors object
+//     return res.status(400).json(errors);
+//   }
 
-  // Get fields
-  const postFields = {};
-  if (req.body.text) postFields.text = req.body.text;
-  if (req.body.name) postFields.name = req.body.name;
-  if (req.body.avatar) postFields.avatar = req.body.avatar;
-  if (req.body.profile) postFields.profile = req.body.profile;
+//   // Get fields
+//   const postFields = {};
+//   if (req.body.text) postFields.text = req.body.text;
+//   if (req.body.name) postFields.name = req.body.name;
+//   if (req.body.avatar) postFields.avatar = req.body.avatar;
+//   if (req.body.profile) postFields.profile = req.body.profile;
 
-  Post.findById(req.params.id)
-    .then(post => {
-      post.set(postFields)
-      post.save()
-      .then(post => 
-        res.json(post)
-        );
-    })
-});
+//   Post.findById(req.params.id)
+//     .then(post => {
+//       post.set(postFields)
+//       post.save()
+//       .then(post => 
+//         res.json(post)
+//         );
+//     })
+// });
 
-//@route      DELETE api/posts/:id
-//@desc       Delete post by id
-//@access     Private
-router.delete('/:id', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Profile.findOne({ user: req.user.id })
-    .then(profile => {
-      Post.findById(req.params.id)
-        .then(post => {
-          // Check if current user is the post owner
-          if(post.user.toString() !== req.user.id) {
-            return res.status(401).json({ notauthorized: 'User not authorized' })
-          }
+// //@route      DELETE api/posts/:id
+// //@desc       Delete post by id
+// //@access     Private
+// router.delete('/:id', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   Profile.findOne({ user: req.user.id })
+//     .then(profile => {
+//       Post.findById(req.params.id)
+//         .then(post => {
+//           // Check if current user is the post owner
+//           if(post.user.toString() !== req.user.id) {
+//             return res.status(401).json({ notauthorized: 'User not authorized' })
+//           }
 
-          // Delete post
-          post.remove().then(() => res.json({ success: true }));
-        }).catch(err => res.status(404).json({ postnotfound: 'Post not found' }));
-   })
-});
+//           // Delete post
+//           post.remove().then(() => res.json({ success: true }));
+//         }).catch(err => res.status(404).json({ postnotfound: 'Post not found' }));
+//    })
+// });
 
 //@route      POST api/posts/like/:id
 //@desc       Like post
@@ -286,21 +286,21 @@ router.delete(
   }
 );
 
-//@route      GET api/posts
-//@desc       Show user's posts
-//@access     Private
-router.get('/handle/:handle/', passport.authenticate('jwt', { session: false}), (req, res) => {
-  Profile.findOne({ handle: req.params.handle })
-    .then(profile => {
-    Post.find({name: profile.handle})
-      .sort({ date: -1 })
-      .then(posts =>
-        res.json(posts))
-      .catch(err =>
-        res.status(404).json({ nophotofound: "No posts found" })
-      );
-    });
-  }
-);
+// //@route      GET api/posts
+// //@desc       Show user's posts
+// //@access     Private
+// router.get('/handle/:handle/', passport.authenticate('jwt', { session: false}), (req, res) => {
+//   Profile.findOne({ handle: req.params.handle })
+//     .then(profile => {
+//     Post.find({name: profile.handle})
+//       .sort({ date: -1 })
+//       .then(posts =>
+//         res.json(posts))
+//       .catch(err =>
+//         res.status(404).json({ nophotofound: "No posts found" })
+//       );
+//     });
+//   }
+// );
 
 module.exports = router;
