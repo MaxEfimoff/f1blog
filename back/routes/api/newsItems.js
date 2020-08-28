@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const passport = require('passport');
 
@@ -23,19 +24,63 @@ const deleteNewsItemComment = require('../controllers/newsItems/deleteNewsItemCo
 router
   .get('/test', test)
   .get('/', fetchAllNewsItems)
-  .get('/:id', passport.authenticate('jwt', {session: false}), fetchNewsItemById)
-  .get('/my-news', passport.authenticate('jwt', {session: false}), fetchMyNewsItems)
-  .get('/profile/:handle/', passport.authenticate('jwt', {session: false}), fetchProfileHandleNewsItems)
-  .get('/profile/:id/', passport.authenticate('jwt', {session: false}), fetchProfileIdNewsItems)
-  .get('/subscribed-profiles-news', passport.authenticate("jwt", { session: false }), fetchMySubscribedProfilesNewsItems)
+  .get(
+    '/:id',
+    passport.authenticate('jwt', { session: false }),
+    fetchNewsItemById
+  )
+  .get(
+    '/my-news',
+    passport.authenticate('jwt', { session: false }),
+    fetchMyNewsItems
+  )
+  .get(
+    '/profile/:handle/',
+    passport.authenticate('jwt', { session: false }),
+    fetchProfileHandleNewsItems
+  )
+  .get(
+    '/profile/:id/',
+    passport.authenticate('jwt', { session: false }),
+    fetchProfileIdNewsItems
+  )
+  .get(
+    '/subscribed-profiles-news',
+    passport.authenticate('jwt', { session: false }),
+    fetchMySubscribedProfilesNewsItems
+  )
 
-  .post('/', passport.authenticate('jwt', {session: false}), createNewsItem)
-  .post('/like/:id', passport.authenticate('jwt', {session: false}), likeNewsItem)
-  .post('/unlike/:id', passport.authenticate('jwt', {session: false}), unlikeNewsItem)
-  .post('/comment/:id', passport.authenticate('jwt', {session: false}), postNewsItemComment)
+  .post('/', passport.authenticate('jwt', { session: false }), createNewsItem)
+  .post(
+    '/like/:id',
+    passport.authenticate('jwt', { session: false }),
+    likeNewsItem
+  )
+  .post(
+    '/unlike/:id',
+    passport.authenticate('jwt', { session: false }),
+    unlikeNewsItem
+  )
+  .post(
+    '/comment/:id',
+    passport.authenticate('jwt', { session: false }),
+    postNewsItemComment
+  )
 
-  .patch('/:id/update-news', passport.authenticate('jwt', {session: false}), updateNewsItem)
-  .delete('/:id', passport.authenticate('jwt', {session: false}), deleteNewsItem)
-  .delete('/comment/:id/:comment_id', passport.authenticate('jwt', {session: false}), deleteNewsItemComment);
+  .patch(
+    '/:id/update-news',
+    passport.authenticate('jwt', { session: false }),
+    updateNewsItem
+  )
+  .delete(
+    '/:id',
+    passport.authenticate('jwt', { session: false }),
+    deleteNewsItem
+  )
+  .delete(
+    '/comment/:id/:comment_id',
+    passport.authenticate('jwt', { session: false }),
+    deleteNewsItemComment
+  );
 
 module.exports = router;
