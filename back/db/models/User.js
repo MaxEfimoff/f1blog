@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     min: 2,
-    max: 30
+    max: 30,
   },
   email: {
     type: String,
@@ -19,22 +19,22 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     min: 6,
-    max: 30
+    max: 30,
   },
   active: {
     type: Boolean,
-    default: false
+    default: false,
   },
   role: {
     enum: ['guest', 'moderator', 'admin'],
     type: String,
     required: true,
-    default: 'guest'
+    default: 'guest',
   },
   date: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = User = mongoose.model('users', UserSchema);

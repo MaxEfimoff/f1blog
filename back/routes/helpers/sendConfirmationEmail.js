@@ -6,9 +6,9 @@ module.exports = sendConfirmationEmail = ({ toUser, hash }, callback) => {
     service: 'gmail',
     auth: {
       user: config.google_user,
-      pass: config.google_password
-    }
-  })
+      pass: config.google_password,
+    },
+  });
 
   const message = {
     from: config.google_user,
@@ -18,14 +18,14 @@ module.exports = sendConfirmationEmail = ({ toUser, hash }, callback) => {
     <h3>Привет! ${toUser.name}</h3>
     <p>Спасибо за регистрацию на портале F1blog.ru!</p>
     <p>Для активации аккаунта, пройдите по ссылке: <a target="_" href="${config.domain}/users/${hash}/activate">${config.domain}/activate </a></p>
-    `
-  }
+    `,
+  };
 
   transporter.sendMail(message, (error, info) => {
-    if(error) {
-      callback(error, null)
+    if (error) {
+      callback(error, null);
     } else {
-      callback(null, info)
+      callback(null, info);
     }
-  }) 
-}
+  });
+};

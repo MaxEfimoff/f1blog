@@ -6,12 +6,15 @@ const ConfirmationHashSchema = new Schema({
   expireAt: {
     type: Date,
     default: Date.now,
-    index: { expires: '1d' }
+    index: { expires: '1d' },
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'users'
-  }
+    ref: 'users',
+  },
 });
 
-module.exports = ConfirmationHash = mongoose.model('confirmationHash', ConfirmationHashSchema);
+module.exports = ConfirmationHash = mongoose.model(
+  'confirmationHash',
+  ConfirmationHashSchema
+);

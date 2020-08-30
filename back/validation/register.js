@@ -56,6 +56,6 @@ module.exports = validateRegisterInput = (data) => {
     // Check if errors is an empty object
     // We can't use Validator.isEmpty() because it checks only strings
     // If everything is ok errors object will still be empty in the end
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors),
   };
 };

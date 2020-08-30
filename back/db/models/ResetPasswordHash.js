@@ -6,12 +6,15 @@ const ResetPasswordHashSchema = new Schema({
   expireAt: {
     type: Date,
     default: Date.now,
-    index: { expires: '1d' }
+    index: { expires: '1d' },
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'users'
-  }
+    ref: 'users',
+  },
 });
 
-module.exports = ResetPasswordHash = mongoose.model('resetPasswordHash', ResetPasswordHashSchema);
+module.exports = ResetPasswordHash = mongoose.model(
+  'resetPasswordHash',
+  ResetPasswordHashSchema
+);

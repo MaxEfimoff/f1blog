@@ -1,13 +1,13 @@
-const Validator = require("validator");
-const isEmpty = require("./is-empty.js");
+const Validator = require('validator');
+const isEmpty = require('./is-empty.js');
 
 module.exports = validateSetNewPasswordInput = (data) => {
   let errors = {};
 
-  data.password = !isEmpty(data.password) ? data.password : "";
-  
+  data.password = !isEmpty(data.password) ? data.password : '';
+
   if (Validator.isEmpty(data.password)) {
-    errors.password = "Поле Пароль обязательно к заполнению";
+    errors.password = 'Поле Пароль обязательно к заполнению';
   }
 
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
@@ -16,6 +16,6 @@ module.exports = validateSetNewPasswordInput = (data) => {
 
   return {
     errors: errors,
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors),
   };
 };
