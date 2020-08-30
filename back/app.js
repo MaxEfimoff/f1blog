@@ -32,7 +32,12 @@ app.use(methodOverride('_method'));
 const db = require('./config/keys').mongoURI;
 
 // Connect to Mongodb
-mongoose.connect(db, { useFindAndModify: false });
+mongoose.connect(db, {
+  useFindAndModify: false,
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+});
 
 // Passport middleware
 app.use(passport.initialize());
