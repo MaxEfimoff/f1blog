@@ -6,12 +6,21 @@ const ProfileSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users'
   },
+  // The ones who are subscribed for me
+  subscibers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'profile'
+    }
+  ],
+  // The ones I am subscribed to
   subscribedProfiles: [
     {
       type: Schema.Types.ObjectId,
       ref: 'profile'
     }
   ],
+  // The ones I am subscribed to
   subscribedBlogs: [
     {
       type: Schema.Types.ObjectId,
@@ -42,6 +51,10 @@ const ProfileSchema = new Schema({
     type: String,
     min: 2,
     max: 50
+  },
+  karma: {
+    type: Number,
+    default: 1000
   },
   date: {
     type: Date,

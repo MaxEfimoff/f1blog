@@ -5,7 +5,7 @@ const fetchMyNewsItems = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
     const myNewsItems = await NewsItem
-      .find({name: profile.handle})
+      .find({author: profile})
       .sort({date: -1});
     return res.json(myNewsItems);
   } catch (error) {

@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
+
+const router = express.Router();
 
 // Controllers
 const test = require('../controllers/users/test');
@@ -14,7 +15,11 @@ const hashResetPassword = require('../controllers/users/hashResetPassword');
 
 // Shortened for /api/users/test
 router.get('/test', test);
-router.get('/current', passport.authenticate('jwt', { session: false }), current);
+router.get(
+  '/current',
+  passport.authenticate('jwt', { session: false }),
+  current
+);
 router.get('/all', all);
 router.post('/register', register);
 router.post('/reset-password', resetPassword);

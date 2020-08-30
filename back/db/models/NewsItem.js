@@ -10,8 +10,11 @@ const NewsItemSchema = new Schema({
   title: {
     type: String,
     required: true,
-    max: 50,
-    min: 6
+    max: 150,
+    min: 20
+  },
+  image: { 
+    type: String 
   },
   text: {
     type: String,
@@ -27,8 +30,16 @@ const NewsItemSchema = new Schema({
       }
     }
   ],
-  comments: [
+  dislikes: [
     {
+      profile: {
+        type: Schema.Types.ObjectId,
+        ref: 'profile'
+      }
+    }
+  ],
+  threads: [
+    { 
       profile: {
         type: Schema.Types.ObjectId,
         ref: 'profile'
@@ -39,6 +50,68 @@ const NewsItemSchema = new Schema({
         max: 500,
         required: true
       },
+      likes: [
+        {
+          profile: {
+            type: Schema.Types.ObjectId,
+            ref: 'profile'
+          }
+        }
+      ],
+      dislikes: [
+        {
+          profile: {
+            type: Schema.Types.ObjectId,
+            ref: 'profile'
+          }
+        }
+      ],
+      rating: {
+        type: Number,
+        default: 100
+      },
+      comments: [
+        {
+          profile: {
+            type: Schema.Types.ObjectId,
+            ref: 'profile'
+          },
+          text: {
+            type: String,
+            min: 6,
+            max: 500,
+            required: true
+          },
+          likes: [
+            {
+              profile: {
+                type: Schema.Types.ObjectId,
+                ref: 'profile'
+              }
+            }
+          ],
+          dislikes: [
+            {
+              profile: {
+                type: Schema.Types.ObjectId,
+                ref: 'profile'
+              }
+            }
+          ],
+          rating: {
+            type: Number,
+            default: 100
+          },
+          createdAt: {
+            type: Date,
+            default: Date.now
+          },
+          updatedAt: {
+            type: Date,
+            default: Date.now
+          }
+        }
+      ],
       createdAt: {
         type: Date,
         default: Date.now
@@ -56,6 +129,10 @@ const NewsItemSchema = new Schema({
       },
     }
   ],
+  rating: {
+    type: Number,
+    default: 100
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -1,25 +1,25 @@
-const validateNewsItemInput = require('../../../validation/newsItem');
 const NewsItem = require('../../../db/models/NewsItem');
+const validateNewsItemtInput = require('../../../validation/newsItem');
+
 const createNewsItem = async (req, res) => {
   try {
-    const { errors, isValid } = validateNewsItemInput(req.body);
+    const { errors, isValid } = validateNewsItemtInput(req.body);
 
-  if(!isValid) {
-    return res.status(400).json(errors)
-  }
+    if(!isValid) {
+      return res.status(400).json(errors);
+    }
 
-  const newsItem = new NewsItem({
-    title: req.body.title,
-    text: req.body.text,
-    profile: req.body.profile
-  });
+    const newsItemFields = {};
+    newsItemFields.author = req.body.profile;
 
-  newsItem.save();
-  return res.json(newsItem);
+    if(req.body.title) newsItemFields.title = req.body.title;
+    if(req.body.text) newsItemFields.text = req.body.text;
 
+    new NewsItem(newsItemFields).save();
+    return res.json(newsItemFields);
   } catch (error) {
     console.log(error);
-    res.status(404).json("Was not able to save the news item");
+    res.status(404).json({ profile: "Can not save the post" });
   }
 }
 

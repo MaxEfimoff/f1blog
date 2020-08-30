@@ -51,7 +51,15 @@ const GroupSchema = new Schema({
       }
     }
   ],
-  date: {
+  rating: {
+    type: Number,
+    default: 1000
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
     type: Date,
     default: Date.now
   }
