@@ -1,7 +1,7 @@
 const Validator = require('validator');
 const isEmpty = require('./is-empty.js');
 
-module.exports = validateRegisterInput = (data) => {
+const validateRegisterInput = (data) => {
   let errors = {};
 
   // If user leaves empty field we turn it into empty string
@@ -59,3 +59,5 @@ module.exports = validateRegisterInput = (data) => {
     isValid: isEmpty(errors),
   };
 };
+
+module.exports = validateRegisterInput;

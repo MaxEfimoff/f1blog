@@ -1,6 +1,6 @@
 const NewsItem = require('../../../db/models/NewsItem');
 
-const postNewsItemComment = (req, res) => {
+const postNewsItemThread = (req, res) => {
   const { errors, isValid } = validatePostInput(req.body);
 
   // Check validation
@@ -10,21 +10,26 @@ const postNewsItemComment = (req, res) => {
 
   NewsItem.findById(req.params.id)
     .then((newsItem) => {
-      const newComment = {
+      const newThread = {
         text: req.body.text,
         name: req.body.name,
         author: req.body.profile,
       };
 
-      // Add to comments array
-      newsItem.comments.push(newComment);
+      // Add to threads array
+      newsItem.threads.push(newThread);
 
       // Save
       newsItem.save().then((newsItem) => res.json(newsItem));
     })
     .catch((err) =>
-      res.status(404).json({ newsitemnotfound: 'No post found' })
+      res
+        .status(404)
+        .json({
+          status: 'fail',
+          cannotpostnewsitemthread: 'Can not create new thead',
+        })
     );
 };
 
-module.exports = postNewsItemComment;
+module.exports = postNewsItemThread;

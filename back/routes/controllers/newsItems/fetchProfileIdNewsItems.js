@@ -4,12 +4,23 @@ const Profile = require('../../../db/models/Profile');
 const fetchProfileIdNewsItems = async (req, res) => {
   try {
     const profile = await Profile.findOne({ id: req.params.id });
-    const profileIdNewsItems = await NewsItem.find({ author: profile }).sort({
+
+    const newsItems = await NewsItem.find({ author: profile }).sort({
       date: -1,
     });
-    return res.json(profileIdNewsItems);
+
+    return res.status(200).json({
+      status: 'success',
+      results: newsItems.length,
+      data: {
+        newsItems,
+      },
+    });
   } catch (error) {
-    res.json({ nopostsfound: 'No posts found' });
+    res.status(404).json({
+      status: 'fail',
+      nonewsitemsbyprofilehidfound: 'No news articles found',
+    });
     console.log(error);
   }
 };

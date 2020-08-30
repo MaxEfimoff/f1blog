@@ -1,7 +1,7 @@
 const Validator = require('validator');
 const isEmpty = require('./is-empty.js');
 
-module.exports = validateSetNewPasswordInput = (data) => {
+const validateSetNewPasswordInput = (data) => {
   let errors = {};
 
   data.password = !isEmpty(data.password) ? data.password : '';
@@ -19,3 +19,5 @@ module.exports = validateSetNewPasswordInput = (data) => {
     isValid: isEmpty(errors),
   };
 };
+
+module.exports = validateSetNewPasswordInput;

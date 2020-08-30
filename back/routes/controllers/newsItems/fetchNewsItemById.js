@@ -2,10 +2,19 @@ const NewsItem = require('../../../db/models/NewsItem');
 
 const fetchNewsItemById = async (req, res) => {
   try {
-    const newsItemsById = await NewsItem.findById(req.params.id);
-    return res.json(newsItemsById);
+    const newsItem = await NewsItem.findById(req.params.id);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        newsItem,
+      },
+    });
   } catch (error) {
-    res.json({ nopostsfound: 'No post found with this Id' });
+    res.status(404).json({
+      status: 'fail',
+      nonewsitemsbyidfound: 'No news articles found  with this Id',
+    });
     console.log(error);
   }
 };

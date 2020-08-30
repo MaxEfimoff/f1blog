@@ -16,10 +16,20 @@ const createNewsItem = async (req, res) => {
     if (req.body.text) newsItemFields.text = req.body.text;
 
     new NewsItem(newsItemFields).save();
-    return res.json(newsItemFields);
+    return res.status(201).json({
+      status: 'success',
+      data: {
+        newsItemFields,
+      },
+    });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ profile: 'Can not save the post' });
+    res
+      .status(404)
+      .json({
+        status: 'fail',
+        cantcreatenewsitem: 'Can not save the news article',
+      });
   }
 };
 

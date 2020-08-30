@@ -1,31 +1,35 @@
 const NewsItem = require('../../../db/models/NewsItem');
 const Profile = require('../../../db/models/Profile');
 
-const likeNewsItem = (req, res) => {
-  Profile.findOne({ user: req.user.id }).then((profile) => {
-    NewsItem.findById(req.params.id)
-      .then((newsItem) => {
-        // Check if user already liked this post
-        // Loops through likes array and checks if user id is there
-        // If req.params.id is in the post.likes array, filtered array length will be > 0
-        if (
-          newsItem.likes.filter((like) => like.user.toString() === req.user.id)
-            .length > 0
-        ) {
-          return res
-            .status(400)
-            .json({ alreadyliked: 'User already liked this news article' });
-        }
+const likeNewsItem = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
 
-        // Add user id to likes array
-        newsItem.likes.unshift({ user: req.user.id });
+    const newsItem = await NewsItem.findById(req.params.id);
 
-        newsItem.save().then((newsItem) => res.json(newsItem));
-      })
-      .catch((err) =>
-        res.status(404).json({ postnotfound: 'News article not found' })
-      );
-  });
+    if (newsItem.likes.filter((like) => like.profile === profile).length > 0) {
+      return res
+        .status(400)
+        .json({ alreadyliked: 'User already liked this news article' });
+    }
+
+    await newsItem.likes.unshift({ profile });
+
+    await newsItem.save();
+
+    return res.status(201).json({
+      status: 'success',
+      data: {
+        newsItem,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      status: 'fail',
+      cannotlikenewsitem: 'Can not like the news article',
+    });
+  }
 };
 
 module.exports = likeNewsItem;

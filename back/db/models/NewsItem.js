@@ -40,7 +40,7 @@ const NewsItemSchema = new Schema({
   ],
   threads: [
     {
-      profile: {
+      author: {
         type: Schema.Types.ObjectId,
         ref: 'profile',
       },
@@ -72,7 +72,7 @@ const NewsItemSchema = new Schema({
       },
       comments: [
         {
-          profile: {
+          author: {
             type: Schema.Types.ObjectId,
             ref: 'profile',
           },
