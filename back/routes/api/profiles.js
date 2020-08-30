@@ -14,7 +14,7 @@ const deleteProfile = require('../controllers/profiles/deleteProfile');
 const getAllSubscribedProfiles = require('../controllers/profiles/getAllSubscribedProfiles');
 const addSubscribedProfile = require('../controllers/profiles/addSubscribedProfile');
 
-// Shortened for /api/profile/test
+// Shortened for /api/profiles/test
 router.get('/test', test);
 router.get('/all', passport.authenticate('jwt', {session: false}), all);
 router.get('/', passport.authenticate('jwt', {session: false}), userProfile);

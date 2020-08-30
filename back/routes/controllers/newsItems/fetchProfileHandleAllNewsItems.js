@@ -1,9 +1,9 @@
 const NewsItem = require('../../../db/models/NewsItem');
 const Profile = require('../../../db/models/Profile');
 
-const fetchMyNewsItems = async (req, res) => {
+const fetchProfileHandleAllNewsItems = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const profile = await Profile.findOne({ user: req.params.handle});
     const myNewsItems = await NewsItem
       .find({name: profile.handle})
       .sort({date: -1});
@@ -14,4 +14,4 @@ const fetchMyNewsItems = async (req, res) => {
   }
 }
 
-module.exports = fetchMyNewsItems;
+module.exports = fetchProfileHandleAllNewsItems;

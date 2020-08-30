@@ -3,14 +3,14 @@ const router = express.Router();
 const passport = require('passport');
 
 // Validation
-// const validatePostInput = require('../../validation/post');
+// const validateNewsItemInput = require('../../validation/newsItem');
 
 // Controllers
 const test = require('../controllers/newsItems/test');
 const fetchAllNewsItems = require('../controllers/newsItems/fetchAllNewsItems');
 const fetchMyNewsItems = require('../controllers/newsItems/fetchMyNewsItems');
-const fetchAllProfileIdNewsItems = require('../controllers/newsItems/fetchAllProfileIdNewsItems');
-const fetchProfileHandleNewsItems = require('../controllers/newsItems/fetchProfileHandleNewsItems');
+const fetchNewsItemById = require('../controllers/newsItems/fetchNewsItemById');
+const fetchProfileHandleAllNewsItems = require('../controllers/newsItems/fetchProfileHandleAllNewsItems');
 const createNewsItem = require('../controllers/newsItems/createNewsItem');
 const updateNewsItem = require('../controllers/newsItems/updateNewsItem');
 const deleteNewsItem = require('../controllers/newsItems/deleteNewsItem');
@@ -19,12 +19,12 @@ const unlikeNewsItem = require('../controllers/newsItems/unlikeNewsItem');
 const postNewsItemComment = require('../controllers/newsItems/postNewsItemComment');
 const deleteNewsItemComment = require('../controllers/newsItems/deleteNewsItemComment');
 
-// Shortened for /api/posts/test
+// Shortened for /api/newsitems/test
 router.get('/test', test);
 router.get('/all', fetchAllNewsItems);
 router.get('/my-news', passport.authenticate('jwt', {session: false}), fetchMyNewsItems);
 router.get('/:id', passport.authenticate('jwt', {session: false}), fetchNewsItemById);
-router.get('/:handle/', passport.authenticate('jwt', {session: false}), fetchProfileHandleNewsItems);
+router.get('/:handle/all', passport.authenticate('jwt', {session: false}), fetchProfileHandleAllNewsItems);
 
 router.post('/', passport.authenticate('jwt', {session: false}), createNewsItem);
 router.post('/like/:id', passport.authenticate('jwt', {session: false}), likeNewsItem);
@@ -45,84 +45,36 @@ router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', {session:
 
 
 
-//@route      GET api/posts/
-//@desc       Get posts
-//@access     Private
-router.get('/all', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Post
-    .find()
-    .sort({date: -1})
-    .then(posts => res.json(posts))
-    .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
-})
 
-//@route      GET api/my-posts/
-//@desc       Get my posts
-//@access     Private
-router.get('/my-posts', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Profile.findOne({ user: req.user.id })
-  .then(profile => {
-    Post
-    .find({name: profile.handle})
-    .sort({date: -1})
-    .then(posts => res.json(posts))
-  })
-    .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
-})
 
-//@route      GET api/friends-posts/
-//@desc       Get friends posts
-//@access     Private
-router.get('/friends-posts', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Profile.findOne({ user: req.user.id })
-    .then(profile => {
-      Post
-        .find({name: { $in: profile.friends.map(a => a.handle) }})
-        .sort({date: -1})
-        .then(posts => res.json(posts)
-        )
-        .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
-  })
-})
 
-//@route      GET api/posts/:id
-//@desc       Get post by id
-//@access     Private
-router.get('/:id', passport.authenticate("jwt", { session: false }), (req, res) => {
-  Post
-    .findById(req.params.id)
-    .then(post => res.json(post))
-    .catch(err => res.status(404).json({nopostfound: 'No post found with that Id'}));
-})
+// //@route      GET api/friends-posts/
+// //@desc       Get friends posts
+// //@access     Private
+// router.get('/friends-posts', passport.authenticate("jwt", { session: false }), (req, res) => {
+//   Profile.findOne({ user: req.user.id })
+//     .then(profile => {
+//       Post
+//         .find({name: { $in: profile.friends.map(a => a.handle) }})
+//         .sort({date: -1})
+//         .then(posts => res.json(posts)
+//         )
+//         .catch(err => res.status(404).json({nopostsfound: 'No posts found'}));
+//   })
+// })
 
-//@route      POST api/posts/
-//@desc       Create post
-//@access     Private
-router.post('/', passport.authenticate("jwt", { session: false }), (req, res) => {
-  const {errors, isValid} = validatePostInput(req.body);
 
-  // Check Validation
-  if(!isValid) {
-    // If any errors, send 400 with errors object
-    return res.status(400).json(errors);
-  }
 
-  const newPost = new Post({
-    text: req.body.text,
-    name: req.body.name,
-    profile: req.body.profile,
-    avatar: req.body.avatar
-  });
 
-  newPost.save()
-    .then(post => res.json(post));
-});
+
+
+
 
 //@route      PATCH api/posts/
 //@desc       Update post
 //@access     Private
 router.patch('/:id/update-post', passport.authenticate("jwt", { session: false }), (req, res) => {
-  const {errors, isValid} = validatePostInput(req.body);
+  const {errors, isValid} = validateNewsItemInput(req.body);
 
   // Check Validation
   if(!isValid) {
@@ -134,7 +86,6 @@ router.patch('/:id/update-post', passport.authenticate("jwt", { session: false }
   const postFields = {};
   if (req.body.text) postFields.text = req.body.text;
   if (req.body.name) postFields.name = req.body.name;
-  if (req.body.avatar) postFields.avatar = req.body.avatar;
   if (req.body.profile) postFields.profile = req.body.profile;
 
   Post.findById(req.params.id)
@@ -225,7 +176,7 @@ router.post(
   "/comment/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { errors, isValid } = validatePostInput(req.body);
+    const { errors, isValid } = validateNewsItemInput(req.body);
 
     // Check validation
     if (!isValid) {
@@ -238,8 +189,7 @@ router.post(
         const newComment = {
           text: req.body.text,
           name: req.body.name,
-          profile: req.body.profile,
-          avatar: req.body.avatar
+          profile: req.body.profile
         };
 
         // Add to comments array

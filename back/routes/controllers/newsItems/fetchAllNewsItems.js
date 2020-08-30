@@ -5,7 +5,7 @@ const fetchAllNewsItems = async (req, res) => {
     const allNewsItems = await NewsItem.find().sort({date: -1});
     return res.json(allNewsItems);
   } catch (error) {
-    res.json({nopostsfound: 'No posts found'})
+    res.json({nopostsfound: 'No newsitems found'})
     console.log(error);
   }
 }
