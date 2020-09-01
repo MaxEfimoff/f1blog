@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "pm2": "pm2 start server.js -i 0",
     "server": "nodemon server.js",
     "test": "jest --verbose",
     "client": "cd ../front && npm run serve",

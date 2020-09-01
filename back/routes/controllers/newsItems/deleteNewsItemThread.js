@@ -1,7 +1,7 @@
 const NewsItem = require('../../../db/models/NewsItem');
 const Profile = require('../../../db/models/Profile');
 
-const deleteNewsItemThread = (req, res) => {
+const deleteNewsItemThread = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
@@ -28,8 +28,8 @@ const deleteNewsItemThread = (req, res) => {
 
     // Splice thread out of array
     newsItem.threads.splice(removeIndex, 1);
-    newsItem.save()
-    
+    newsItem.save();
+
     return res.status(200).json({
       status: 'success',
       data: {
@@ -40,7 +40,10 @@ const deleteNewsItemThread = (req, res) => {
     console.log(error);
     res
       .status(404)
-      .json({ status: 'fail', cantdeletenewsitemthread: 'Can not delete the thread' });
+      .json({
+        status: 'fail',
+        cantdeletenewsitemthread: 'Can not delete the thread',
+      });
   }
 };
 
