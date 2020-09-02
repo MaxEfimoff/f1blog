@@ -17,7 +17,7 @@ const addSubscribedProfile = require('../controllers/profiles/addSubscribedProfi
 
 // Shortened for /api/profiles/test
 router.get('/test', test);
-router.get('/all', passport.authenticate('jwt', { session: false }), all);
+router.get('/all' /*, passport.authenticate('jwt', { session: false })*/, all);
 router.get('/', passport.authenticate('jwt', { session: false }), userProfile);
 router.get(
   '/handle/:handle',
@@ -26,7 +26,7 @@ router.get(
 );
 router.get(
   '/user/:user_id',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt' /*, { session: false }*/),
   userId
 );
 router.get(

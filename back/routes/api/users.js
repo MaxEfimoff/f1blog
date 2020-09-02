@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport');
+const cleanCache = require('../../middlewares/cleanCache');
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   current
 );
-router.get('/all', all);
+router.get('/all', cleanCache, all);
 router.post('/register', register);
 router.post('/reset-password', resetPassword);
 router.post('/login', login);
