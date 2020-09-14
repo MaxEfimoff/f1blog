@@ -1,5 +1,6 @@
 const NewsItem = require('../../../db/models/NewsItem');
 const Profile = require('../../../db/models/Profile');
+const Tag = require('../../../db/models/Tag');
 const validateNewsItemtInput = require('../../../validation/newsItem');
 
 const createNewsItem = async (req, res) => {
@@ -19,8 +20,23 @@ const createNewsItem = async (req, res) => {
 
     if (req.body.title) newsItemFields.title = req.body.title;
     if (req.body.text) newsItemFields.text = req.body.text;
+    if (req.body.tags) newsItemFields.tags = req.body.tags;
 
-    new NewsItem(newsItemFields).save();
+    const newsItem = await new NewsItem(newsItemFields).save();
+
+    if (req.body.tags) {
+      newsItemFields.tags.map(async (tag) => {
+        let existingTag = await Tag.findOne({ title: tag });
+
+        if (!existingTag) {
+          existingTag = await new Tag({ title: tag }).save();
+        }
+
+        existingTag.newsItems.unshift({ newsItem });
+        existingTag.save();
+      });
+    }
+
     return res.status(201).json({
       status: 'success',
       data: {

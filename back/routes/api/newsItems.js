@@ -6,6 +6,7 @@ const passport = require('passport');
 const createNewsItem = require('../controllers/newsItems/createNewsItem');
 const deleteNewsItem = require('../controllers/newsItems/deleteNewsItem');
 const deleteNewsItemThread = require('../controllers/newsItems/deleteNewsItemThread');
+const disikeNewsItem = require('../controllers/newsItems/dislikeNewsItem');
 const fetchAllNewsItems = require('../controllers/newsItems/fetchAllNewsItems');
 const fetchMyNewsItems = require('../controllers/newsItems/fetchMyNewsItems');
 const fetchNewsItemById = require('../controllers/newsItems/fetchNewsItemById');
@@ -14,6 +15,7 @@ const likeNewsItem = require('../controllers/newsItems/likeNewsItem');
 const postNewsItemThread = require('../controllers/newsItems/postNewsItemThread');
 const test = require('../controllers/newsItems/test');
 const unlikeNewsItem = require('../controllers/newsItems/unlikeNewsItem');
+const undislikeNewsItem = require('../controllers/newsItems/unlikeNewsItem');
 const updateNewsItem = require('../controllers/newsItems/updateNewsItem');
 
 // Shortened for /api/newsitems/test
@@ -49,6 +51,16 @@ router.post(
   '/unlike/:id',
   passport.authenticate('jwt', { session: false }),
   unlikeNewsItem
+);
+router.post(
+  '/dislike/:id',
+  passport.authenticate('jwt', { session: false }),
+  disikeNewsItem
+);
+router.post(
+  '/undislike/:id',
+  passport.authenticate('jwt', { session: false }),
+  undislikeNewsItem
 );
 router.post(
   '/thread/:id',

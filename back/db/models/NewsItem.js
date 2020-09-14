@@ -122,13 +122,7 @@ const NewsItemSchema = new Schema({
       },
     },
   ],
-  tags: [
-    {
-      text: {
-        type: String,
-      },
-    },
-  ],
+  tags: [{ type: String }],
   rating: {
     type: Number,
     default: 100,
