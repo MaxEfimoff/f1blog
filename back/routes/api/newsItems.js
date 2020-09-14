@@ -10,6 +10,7 @@ const disikeNewsItem = require('../controllers/newsItems/dislikeNewsItem');
 const fetchAllNewsItems = require('../controllers/newsItems/fetchAllNewsItems');
 const fetchMyNewsItems = require('../controllers/newsItems/fetchMyNewsItems');
 const fetchNewsItemById = require('../controllers/newsItems/fetchNewsItemById');
+const fetchNewsItemsByTag = require('../controllers/newsItems/fetchNewsItemsByTag');
 const fetchProfileHandleAllNewsItems = require('../controllers/newsItems/fetchProfileHandleAllNewsItems');
 const likeNewsItem = require('../controllers/newsItems/likeNewsItem');
 const postNewsItemThread = require('../controllers/newsItems/postNewsItemThread');
@@ -35,6 +36,11 @@ router.get(
   '/:handle/all',
   passport.authenticate('jwt', { session: false }),
   fetchProfileHandleAllNewsItems
+);
+router.get(
+  '/tag/:title',
+  passport.authenticate('jwt', { session: false }),
+  fetchNewsItemsByTag
 );
 
 router.post(

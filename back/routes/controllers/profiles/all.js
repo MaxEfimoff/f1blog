@@ -4,7 +4,7 @@ const all = async (req, res) => {
   try {
     const errors = {};
 
-    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+    const profiles = await Profile.find().populate('user', ['name']);
 
     if (!profiles) {
       errors.noprofile = 'There are no profiles';
