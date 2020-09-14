@@ -3,7 +3,7 @@ const Profile = require('../../../db/models/Profile');
 
 const fetchProfileHandleAllNewsItems = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.params.handle });
+    const profile = await Profile.findOne({ handle: req.params.handle });
 
     const newsItems = await NewsItem.find({ author: profile }).limit(10).sort({
       date: -1,
@@ -19,7 +19,7 @@ const fetchProfileHandleAllNewsItems = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'fail',
-      nonewsitemsbyprofilehandlefound: 'No news articlesfound',
+      nonewsitemsbyprofilehandlefound: 'No news articles found',
     });
     console.log(error);
   }

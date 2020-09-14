@@ -48,7 +48,7 @@ const createProfile = async (req, res) => {
         { $set: profileFields },
         { new: true }
       );
-      return res.json(profile);
+      return res.status(201).json(profile);
     } else {
       // Create profile
 
@@ -63,7 +63,7 @@ const createProfile = async (req, res) => {
 
       // Save profile if handle not in use
       new Profile(profileFields).save();
-      return res.json(profile);
+      return res.status(200).json({ msg: 'profile was created' });
     }
   } catch (error) {
     console.log(error);

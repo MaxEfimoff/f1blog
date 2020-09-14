@@ -20,8 +20,10 @@ const updateNewsItem = async (req, res) => {
 
     const newsItem = await NewsItem.findById(req.params.id);
 
-    if (newsItem.author !== profile) {
-      return res.status(401).json({ notauthorized: 'User not authorized' });
+    if (newsItem.author.toString() !== profile.id) {
+      return res
+        .status(401)
+        .json({ notauthorized: 'You cannot edit this article' });
     }
 
     newsItem.set(newsItemFields).save();

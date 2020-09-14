@@ -5,14 +5,14 @@ const cleanCache = require('../../middlewares/cleanCache');
 const router = express.Router();
 
 // Controllers
-const test = require('../controllers/users/test');
-const current = require('../controllers/users/current');
+const activate = require('../controllers/users/activate');
 const all = require('../controllers/users/all');
+const current = require('../controllers/users/current');
+const hashResetPassword = require('../controllers/users/hashResetPassword');
+const login = require('../controllers/users/login');
 const register = require('../controllers/users/register');
 const resetPassword = require('../controllers/users/resetPassword');
-const login = require('../controllers/users/login');
-const activate = require('../controllers/users/activate');
-const hashResetPassword = require('../controllers/users/hashResetPassword');
+const test = require('../controllers/users/test');
 
 // Shortened for /api/users/test
 router.get('/test', test);

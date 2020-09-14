@@ -11,7 +11,9 @@ const morgan = require('morgan');
 const users = require('./routes/api/users');
 const profiles = require('./routes/api/profiles');
 const newsItems = require('./routes/api/newsItems');
-require('./services/cache');
+
+// Cache
+// require('./services/cache');
 
 const app = express();
 

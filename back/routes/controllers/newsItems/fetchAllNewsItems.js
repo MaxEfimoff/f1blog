@@ -2,6 +2,8 @@ const NewsItem = require('../../../db/models/NewsItem');
 
 const fetchAllNewsItems = async (req, res) => {
   try {
+    console.log(req.query);
+
     const newsItems = await NewsItem.find().limit(10).sort({ createdAt: -1 });
 
     return res.status(200).json({

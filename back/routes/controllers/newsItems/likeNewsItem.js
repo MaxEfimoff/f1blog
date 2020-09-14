@@ -4,10 +4,14 @@ const Profile = require('../../../db/models/Profile');
 const likeNewsItem = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
+    console.log(profile);
 
     const newsItem = await NewsItem.findById(req.params.id);
 
-    if (newsItem.likes.filter((like) => like.profile === profile).length > 0) {
+    if (
+      newsItem.likes.filter((like) => like.profile.toString() === profile.id)
+        .length > 0
+    ) {
       return res
         .status(400)
         .json({ alreadyliked: 'User already liked this news article' });

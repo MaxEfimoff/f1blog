@@ -3,18 +3,18 @@ const router = express.Router();
 const passport = require('passport');
 
 // Controllers
-const test = require('../controllers/newsItems/test');
+const createNewsItem = require('../controllers/newsItems/createNewsItem');
+const deleteNewsItem = require('../controllers/newsItems/deleteNewsItem');
+const deleteNewsItemThread = require('../controllers/newsItems/deleteNewsItemThread');
 const fetchAllNewsItems = require('../controllers/newsItems/fetchAllNewsItems');
 const fetchMyNewsItems = require('../controllers/newsItems/fetchMyNewsItems');
 const fetchNewsItemById = require('../controllers/newsItems/fetchNewsItemById');
 const fetchProfileHandleAllNewsItems = require('../controllers/newsItems/fetchProfileHandleAllNewsItems');
-const createNewsItem = require('../controllers/newsItems/createNewsItem');
-const updateNewsItem = require('../controllers/newsItems/updateNewsItem');
-const deleteNewsItem = require('../controllers/newsItems/deleteNewsItem');
 const likeNewsItem = require('../controllers/newsItems/likeNewsItem');
-const unlikeNewsItem = require('../controllers/newsItems/unlikeNewsItem');
 const postNewsItemThread = require('../controllers/newsItems/postNewsItemThread');
-const deleteNewsItemThread = require('../controllers/newsItems/deleteNewsItemThread');
+const test = require('../controllers/newsItems/test');
+const unlikeNewsItem = require('../controllers/newsItems/unlikeNewsItem');
+const updateNewsItem = require('../controllers/newsItems/updateNewsItem');
 
 // Shortened for /api/newsitems/test
 router.get('/test', test);
@@ -62,7 +62,7 @@ router.patch(
   updateNewsItem
 );
 router.delete(
-  '/',
+  '/:id',
   passport.authenticate('jwt', { session: false }),
   deleteNewsItem
 );

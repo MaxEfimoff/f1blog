@@ -1,7 +1,8 @@
 const NewsItem = require('../../../db/models/NewsItem');
+const validateNewsItemtInput = require('../../../validation/newsItem');
 
 const postNewsItemThread = (req, res) => {
-  const { errors, isValid } = validatePostInput(req.body);
+  const { errors, isValid } = validateNewsItemtInput(req.body);
 
   // Check validation
   if (!isValid) {
@@ -11,9 +12,8 @@ const postNewsItemThread = (req, res) => {
   NewsItem.findById(req.params.id)
     .then((newsItem) => {
       const newThread = {
-        text: req.body.text,
-        name: req.body.name,
         author: req.body.profile,
+        text: req.body.text,
       };
 
       // Add to threads array
@@ -23,12 +23,10 @@ const postNewsItemThread = (req, res) => {
       newsItem.save().then((newsItem) => res.json(newsItem));
     })
     .catch((err) =>
-      res
-        .status(404)
-        .json({
-          status: 'fail',
-          cannotpostnewsitemthread: 'Can not create new thead',
-        })
+      res.status(404).json({
+        status: 'fail',
+        cannotpostnewsitemthread: 'Can not create new thead',
+      })
     );
 };
 

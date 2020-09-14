@@ -2,6 +2,8 @@ const nodemailer = require('nodemailer');
 const config = require('../../config/keys_dev');
 
 module.exports = sendConfirmationEmail = ({ toUser, hash }, callback) => {
+  console.log(config.google_user, config.google_password);
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

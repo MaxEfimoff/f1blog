@@ -17,6 +17,7 @@ const register = async (req, res) => {
 
     if (user) {
       errors.email = 'Такой Email уже существует';
+      console.log(user);
       return res.status(400).json(errors);
     } else {
       // Create new User using mongoose User schema
